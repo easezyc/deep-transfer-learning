@@ -20,4 +20,4 @@ lows.
 |:--------------:|:-----:|:-----:|:-----:|:-----:|:----:|:----:|:-------:|
 | DCORAL | 77.7±0.3 | 97.6±0.2 | 99.7±0.1 | 81.1±0.4 | 64.6±0.3 | 64.0±0.4 | 80.8 |
 
-`Please note that the results are run by myself. To compared to other methods, I add the coral loss after the average pool layer in ResNet50. In the paper, they add the coral loss after the fc8 in AlexNet.`
+> Please note that the results are run by myself. To compared to other methods, I add the coral loss after the average pool layer in ResNet50. In the paper, they add the coral loss after the fc8 in AlexNet.
