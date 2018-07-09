@@ -1,5 +1,6 @@
 # Deep Transfer Learning on PyTorch
 This is a PyTorch library for deep transfer learning. And this is a part of another repository---[transferlearning](https://github.com/jindongwang/transferlearning) which I will merge this into. If you need more code, please refer to [code](https://github.com/jindongwang/transferlearning/tree/master/code/deep). Here I have implemented some deep transfer methods as follows:
+* DDC：Deep Domain Confusion Maximizing for Domain Invariance
 * DAN: Learning Transferable Features with Deep Adaptation Networks
 * Deep Coral: Deep CORAL Correlation Alignment for Deep Domain Adaptation
 
