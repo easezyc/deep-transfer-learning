@@ -3,6 +3,7 @@ This is a PyTorch library for deep transfer learning. And this is a part of anot
 * DDC：Deep Domain Confusion Maximizing for Domain Invariance
 * DAN: Learning Transferable Features with Deep Adaptation Networks
 * Deep Coral: Deep CORAL Correlation Alignment for Deep Domain Adaptation
+* Revgrad: Unsupervised Domain Adaptation with Adversarial Residual Transform Networks
 
 ## Results on Office31
 | Method | A - W | D - W | W - D | A - D | D - A | W - A | Average |
