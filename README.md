@@ -1,6 +1,8 @@
 # Deep Transfer Learning on PyTorch
 This is a PyTorch library for deep transfer learning. We divide the code into two
-aspects: Single-source Unsupervised Domain Adaptation (SUDA) and Multi-source Unsupervised Domain Adaptation (MUDA). Here I have implemented some deep transfer methods as follows:
+aspects: Single-source Unsupervised Domain Adaptation (SUDA) and Multi-source Unsupervised Domain Adaptation (MUDA). There are many SUDA methods, however I find there is a few MUDA methods with deep learning. Besides, MUDA with deep learning might be a more promising direction for domain adaptation.
+
+Here I have implemented some deep transfer methods as follows:
 * UDA
     * DDC：Deep Domain Confusion Maximizing for Domain Invariance
     * DAN: Learning Transferable Features with Deep Adaptation Networks (ICML2015)
@@ -52,6 +54,16 @@ aspects: Single-source Unsupervised Domain Adaptation (SUDA) and Multi-source Un
 | Multi-Source | MFSAN | 72.1 | 62.0 | 80.3 | 81.8 | 74.1 |
 
 > Note that  (1) Source combine: all source domains are combined together into a traditional single-source v.s. target setting. (2) Single best: among the multiple source domains, we report the best single source transfer results. (3) Multi-source: the results of MUDA methods.
+
+## Note
+> If you find that your accuracy is 100%, the problem might be the dataset folder. Please note that the folder structure required for the data provider to work is:
+```
+-dataset
+    -amazon
+    -webcam
+    -dslr
+```
+
 
 ## Contact
 If you have any problem about this library, please create an Issue or send us an Email at:
