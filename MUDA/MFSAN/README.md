@@ -1,24 +1,64 @@
-# DAN
-A PyTorch implementation of '[Learning Transferable Features with Deep Adaptation Networks](http://ise.thss.tsinghua.edu.cn/~mlong/doc/deep-adaptation-networks-icml15.pdf)'.
+# MFSAN
+A PyTorch implementation of '[Aligning Domain-specific Distribution and Classifier for Cross-domain
+Classification from Multiple Sources](https://github.com/easezyc/deep-transfer-learning/tree/master/MUDA/MFSAN/paper/MFSAN.pdf)'.
 The contributions of this paper are summarized as follows. 
-* They propose a novel deep neural network architecture for domain adaptation, in which all the layers corresponding to task-specific features are adapted in a layerwise manner, hence benefiting from “deep adaptation.”
-* They explore multiple kernels for adapting deep representations, which substantially enhances adaptation effectiveness compared to single kernel methods. Our model can yield unbiased deep features with statistical guarantees.
+* We propose a new two-stage alignment framework for MUDA which aligns the domain-specific distributions of each pair of source and target domains in multiple feature spaces and align the domain-specific classifiers’ output for
+target samples.
 
 ## Requirement
-* python 3
-* pytorch 0.3.1
-* torchvision 0.2.0
+* python 3.6
+* pytorch 0.4.1
+* torchvision 0.2.1
 
 ## Usage
-1. You can download Office31 dataset [here](https://pan.baidu.com/s/1o8igXT4#list/path=%2F). And then unrar dataset in ./dataset/.
-2. You can change the `source_name` and `target_name` in `DAN.py` to set different transfer tasks.
-3. Run `python DAN.py`.
+1. You can download Office31 dataset [here](https://pan.baidu.com/s/1o8igXT4#list/path=%2F). And then unrar dataset in ./dataset/. 
+2. You can download OfficeHome dataset [here](http://hemanthdv.org/OfficeHome-Dataset/). And then unrar dataset in ./dataset/.
+3. Run `python mfsan.py`.
 
-## Results on Office31
-| Method | A - W | D - W | W - D | A - D | D - A | W - A | Average |
-|:--------------:|:-----:|:-----:|:-----:|:-----:|:----:|:----:|:-------:|
-| DANori | 83.8±0.4 | 96.8±0.2 | 99.5±0.1 | 78.4±0.2 | 66.7±0.3 | 62.7±0.2 | 81.3 |
-| DANlast | 81.6±0.7 | 97.2±0.1 | 99.5±0.1 | 80.0±0.7 | 66.2±0.6 | 65.6±0.4 | 81.7 |
-| DANmax | 82.6±0.7 | 97.7±0.1 | 100.0±0.0 | 83.1±0.9 | 66.8±0.3 | 66.6±0.4 | 82.8 |
+## Results on Office31(MUDA) (two source domains)
+| Standards | Method | A,W - D | A,D - W | D,W - A | Average |
+|:--------------:|:--------------:|:-----:|:-----:|:-----:|:-------:|
+| | ResNet | 99.3 | 96.7 | 62.5 | 86.2 |
+|  | DAN | 99.5 | 96.8 | 66.7 | 87.7 |
+| Single Best| DCORAL | 99.7 | 98.0 | 65.3 | 87.7 |
+|  | RevGrad | 99.1 | 96.9 | 68.2 | 88.1 |
+||
+|  | DAN | 99.6 | 97.8 | 67.6 | 88.3 |
+| Source Combine | DCORAL | 99.3 | 98.0 | 67.1 | 88.1 |
+|  | RevGrad | 99.7 | 98.1 | 67.6 | 88.5 |
+||
+| Multi-Source | MFSAN | 99.5 | 98.5 | 72.7 | 90.2 |
 
-> Note that the results **DANori** comes from [paper](http://ise.thss.tsinghua.edu.cn/~mlong/doc/multi-adversarial-domain-adaptation-aaai18.pdf) which has the same author as DAN. The **DANlast** is the results of the last epoch, and **DANmax** is the results of the max results in all epoches. Both **DANlast** and **DANmax** are run by myself with the code.
+## Results on OfficeHome(MUDA) (3 source domains)
+| Standards | Method | C,P,R - A | A,P,R - C | A,C,R - P | A,C,P - R | Average |
+|:--------------:|:--------------:|:-----:|:-----:|:-----:|:-----:|:-------:|
+| | ResNet | 65.3 | 49.6 | 79.7 | 75.4 | 67.5 |
+|  | DAN | 64.1 | 50.8 | 78.2 | 75.0 | 67.0 |
+| Single Best | DCORAL | 68.2 | 56.5 | 80.3 | 75.9 | 70.2 |
+|  | RevGrad | 67.9 | 55.9 | 80.4 | 75.8 | 70.0 |
+||
+|  | DAN | 68.5 | 59.4 | 79.0 | 82.5 | 72.4 |
+| Source Combine | DCORAL | 68.1 | 58.6 | 79.5 | 82.7 | 72.2 |
+|  | RevGrad | 68.4 | 59.1 | 79.5 | 82.7 | 72.4 |
+||
+| Multi-Source | MFSAN | 72.1 | 62.0 | 80.3 | 81.8 | 74.1 |
+
+> Note that  (1) Source combine: all source domains are combined together into a traditional single-source v.s. target setting. (2) Single best: among the multiple source domains, we report the best single source transfer results. (3) Multi-source: the results of MUDA methods.
+
+
+## Reference
+
+```
+Yongchun Zhu, Fuzhen Zhuang, and Deqin Wang. Aligning Domain-specific Distribution and Classifier for Cross-domain Classification from Multiple Sources. Thirty-Third AAAI Conference on Artificial Intelligence (AAAI2019).
+```
+
+or in bibtex style:
+
+```
+@inproceedings{zhu2018mfsan,
+    title={Aligning Domain-specific Distribution and Classifier for Cross-domain Classification from Multiple Sources},
+    author={Zhu, Yongchun and Zhuang, Fuzhen and Wnag, Deqin},
+    booktitle={Thirty-Third AAAI Conference on Artificial Intelligence (AAAI)},
+    year={2019}
+}
+```
