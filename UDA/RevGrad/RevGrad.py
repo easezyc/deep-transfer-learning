@@ -54,7 +54,7 @@ def load_pretrain(model):
 def train(epoch, model):
     #最后的全连接层学习率为前面的10倍
     LEARNING_RATE = lr / math.pow((1 + 10 * (epoch - 1) / epochs), 0.75)
-    print("learning rate：", LEARNING_RATE)
+    print("learning rate: ", LEARNING_RATE)
     optimizer_fea = torch.optim.SGD([
         {'params': model.sharedNet.parameters()},
         {'params': model.cls_fc.parameters(), 'lr': LEARNING_RATE},
