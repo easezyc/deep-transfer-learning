@@ -8,7 +8,7 @@ Adaptation Module (IAM) for cross-domain image classification.
 
 ## Requirement
 * python 3
-* pytorch 0.3.1
+* pytorch 1.0
 * torchvision 0.2.0
 
 ## Usage

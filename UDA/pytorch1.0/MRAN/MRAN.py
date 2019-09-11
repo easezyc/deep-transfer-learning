@@ -3,7 +3,6 @@ import argparse
 import torch
 import torch.nn.functional as F
 import torch.optim as optim
-from torch.autograd import Variable
 import os
 import math
 import data_loader
@@ -60,17 +59,6 @@ def load_data():
 
     return source_train_loader, target_train_loader, target_test_loader
 
-def load_pretrain(model):
-    url = 'https://download.pytorch.org/models/resnet50-19c8e357.pth'
-    pretrained_dict = model_zoo.load_url(url)
-    model_dict = model.state_dict()
-    for k, v in model_dict.items():
-        if not "Inception" in k:
-            model_dict[k] = pretrained_dict[k[k.find(".") + 1:]]
-
-    model.load_state_dict(model_dict)
-    return model
-
 def train(epoch, model, source_loader, target_loader):
     #最后的全连接层学习率为前面的10倍
     LEARNING_RATE = args.lr / math.pow((1 + 10 * (epoch - 1) / args.epochs), 0.75)
@@ -88,13 +76,11 @@ def train(epoch, model, source_loader, target_loader):
     for batch_idx, (source_data, source_label) in enumerate(source_loader):
         if args.cuda:
             source_data, source_label = source_data.cuda(), source_label.cuda()
-        source_data, source_label = Variable(source_data), Variable(source_label)
         optimizer.zero_grad()
 
         for target_data, target_label in target_loader:
             if args.cuda:
                 target_data, target_label = target_data.cuda(), target_label.cuda()
-            target_data, target_label = Variable(target_data), Variable(target_label)
             break
         s_output, mmd_loss = model(source_data, target_data, source_label)
         soft_loss = F.nll_loss(F.log_softmax(s_output, dim=1), source_label)
@@ -109,26 +95,25 @@ def train(epoch, model, source_loader, target_loader):
         if batch_idx % args.log_interval == 0:
             print('Train Epoch: {} [{}/{} ({:.0f}%)]\tLoss: {:.6f}\tlabel_Loss: {:.6f}\tmmd_Loss: {:.6f}'.format(
                 epoch, batch_idx * len(source_data), len(train_loader.dataset),
-                100. * batch_idx / len(train_loader), loss.data[0], soft_loss.data[0], mmd_loss.data[0]))
+                100. * batch_idx / len(train_loader), loss.item(), soft_loss.item(), mmd_loss.item()))
 
 def test(model, test_loader):
     model.eval()
     test_loss = 0
     correct = 0
+    with torch.no_grad():
+        for data, target in test_loader:
+            if args.cuda:
+                data, target = data.cuda(), target.cuda()
+            s_output, t_output = model(data, data, target)
+            test_loss += F.nll_loss(F.log_softmax(s_output, dim = 1), target, reduction='sum').item()# sum up batch loss
+            pred = s_output.data.max(1)[1] # get the index of the max log-probability
+            correct += pred.eq(target.data.view_as(pred)).cpu().sum()
 
-    for data, target in test_loader:
-        if args.cuda:
-            data, target = data.cuda(), target.cuda()
-        data, target = Variable(data, volatile=True), Variable(target)
-        s_output, t_output = model(data, data, target)
-        test_loss += F.nll_loss(F.log_softmax(s_output, dim = 1), target, size_average=False).data[0] # sum up batch loss
-        pred = s_output.data.max(1)[1] # get the index of the max log-probability
-        correct += pred.eq(target.data.view_as(pred)).cpu().sum()
-
-    test_loss /= len(test_loader.dataset)
-    print(args.test_dir, '\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
-        test_loss, correct, len(test_loader.dataset),
-        100. * correct / len(test_loader.dataset)))
+        test_loss /= len(test_loader.dataset)
+        print(args.test_dir, '\nTest set: Average loss: {:.4f}, Accuracy: {}/{} ({:.0f}%)\n'.format(
+            test_loss, correct, len(test_loader.dataset),
+            100. * correct / len(test_loader.dataset)))
     return correct
 
 
@@ -138,7 +123,6 @@ if __name__ == '__main__':
     if args.cuda:
         model.cuda()
     train_loader, unsuptrain_loader, test_loader = load_data()
-    model = load_pretrain(model)
     correct = 0
     for epoch in range(1, args.epochs + 1):
         train(epoch, model, train_loader, unsuptrain_loader)
