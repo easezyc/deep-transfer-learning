@@ -57,15 +57,16 @@ def train(model):
         ], lr=LEARNING_RATE / 10, momentum=momentum, weight_decay=l2_decay)
         try:
             src_data, src_label = src_iter.next()
-            tgt_data, _ = tgt_iter.next()
         except Exception as err:
             src_iter=iter(src_loader)
             src_data, src_label = src_iter.next()
+            
+        try:
+            tgt_data, _ = tgt_iter.next()
+        except Exception as err:
             tgt_iter=iter(tgt_train_loader)
             tgt_data, _ = tgt_iter.next()
             
-        if i % tgt_loader_len == 0:
-            tgt_iter = iter(tgt_train_loader)
         if cuda:
             src_data, src_label = src_data.cuda(), src_label.cuda()
             tgt_data = tgt_data.cuda()

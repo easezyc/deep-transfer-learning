@@ -67,21 +67,23 @@ def train(epoch, model, source_loader, target_loader):
         optimizer = torch.optim.SGD([
         {'params': model.sharedNet.parameters()},
         {'params': model.Inception.parameters(), 'lr': LEARNING_RATE},
-        #{'params': model.target_fc.parameters(), 'lr': LEARNING_RATE}
         ], lr=LEARNING_RATE / 10, momentum=args.momentum, weight_decay=args.l2_decay)
     else:
         optimizer = optim.SGD(model.parameters(), lr=LEARNING_RATE, momentum=args.momentum,weight_decay = args.l2_decay)
     model.train()
-
+    tgt_iter = iter(target_loader)
     for batch_idx, (source_data, source_label) in enumerate(source_loader):
+        try:
+            target_data, _ = tgt_iter.next()
+        except Exception as err:
+            tgt_iter=iter(target_loader)
+            target_data, _ = tgt_iter.next()
+        
         if args.cuda:
             source_data, source_label = source_data.cuda(), source_label.cuda()
+            target_data = target_data.cuda()
         optimizer.zero_grad()
 
-        for target_data, target_label in target_loader:
-            if args.cuda:
-                target_data, target_label = target_data.cuda(), target_label.cuda()
-            break
         s_output, mmd_loss = model(source_data, target_data, source_label)
         soft_loss = F.nll_loss(F.log_softmax(s_output, dim=1), source_label)
         # print((2 / (1 + math.exp(-10 * (epoch) / args.epochs)) - 1))
@@ -129,5 +131,5 @@ if __name__ == '__main__':
         t_correct = test(model, test_loader)
         if t_correct > correct:
             correct = t_correct
-        print("%s max correct:" % args.test_dir, correct)
+        print("%s max correct:" % args.test_dir, correct.item())
         print(args.source_dir, "to", args.test_dir)

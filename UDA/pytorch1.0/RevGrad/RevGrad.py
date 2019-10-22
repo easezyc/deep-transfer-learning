@@ -65,19 +65,20 @@ def train(model):
         ], lr=LEARNING_RATE, momentum=momentum, weight_decay=l2_decay)
 
         try:
-            src_data, src_clabel = src_data_iter.next()
-            tgt_data, tgt_label = tgt_data_iter.next()
+            src_data, src_label = src_iter.next()
         except Exception as err:
-            src_data_iter = iter(src_loader)
-            src_data, src_clabel = src_data_iter.next()
-            tgt_data_iter = iter(tgt_train_loader)
-            tgt_data, tgt_label = tgt_data_iter.next()
-   
-        if i % tgt_loader_len == 0:
-            tgt_data_iter = iter(tgt_train_loader)  
+            src_iter=iter(src_loader)
+            src_data, src_label = src_iter.next()
+            
+        try:
+            tgt_data, _ = tgt_iter.next()
+        except Exception as err:
+            tgt_iter=iter(tgt_train_loader)
+            tgt_data, _ = tgt_iter.next()
+            
         if cuda:
-            src_data, src_clabel = src_data.cuda(), src_clabel.cuda()
-            tgt_data, tgt_label = tgt_data.cuda(), tgt_label.cuda()
+            src_data, src_label = src_data.cuda(), src_label.cuda()
+            tgt_data = tgt_data.cuda()
         src_clabel_pred, src_dlabel_pred = model(src_data)
         loss=nn.CrossEntropyLoss()
         label_loss=loss(src_clabel_pred,src_clabel)
