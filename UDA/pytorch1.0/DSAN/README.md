@@ -1,4 +1,4 @@
-# DAN
+# DSAN
 A PyTorch implementation of 'Deep Subdomain Adaptation Network for Image Classification' which has published on IEEE Transactions on Neural Networks and Learning Systems.
 The contributions of this paper are summarized as follows. 
 * They propose a novel deep neural network architecture for Subdomain Adaptation, which can extend the ability of deep adaptation networks by capturing the fine-grained information for each category.
