@@ -5,6 +5,7 @@ This is a PyTorch library for unsupervised domain adaptation with single source 
 * Deep Coral: Deep CORAL Correlation Alignment for Deep Domain Adaptation
 * Revgrad: Unsupervised Domain Adaptation by Backpropagation
 * MRAN: Multi-representation adaptation network for cross-domain image classification
+* Deep Subdomain Adaptation Network for Image Classification
 
 ## Results on Office31(UDA)
 | Method | A - W | D - W | W - D | A - D | D - A | W - A | Average |
@@ -18,5 +19,6 @@ This is a PyTorch library for unsupervised domain adaptation with single source 
 | Revgrad | 82.0±0.4 | 96.9±0.2 | 99.1±0.1 | 79.7±0.4 | 68.2±0.4 | 67.4±0.5 | 82.2 |
 | Revgrad\* | 82.6±0.9 | 97.8±0.2 | 100.0±0.0 | 83.3±0.9 | 66.8±0.1 | 66.1±0.5 | 82.8 |
 | MRAN | 91.4±0.1 | 96.9±0.3 | 99.8±0.2 | 86.4±0.6 | 68.3±0.5 | 70.9±0.6 | 85.6 |
+| DSAN | 93.6±0.2 | 98.4±0.1 | 100.0±0.0 | 90.2±0.7 | 73.5±0.5 | 74.8±0.4 | 88.4 |
 
 > Note that the results without '\*' comes from [paper](http://ise.thss.tsinghua.edu.cn/~mlong/doc/multi-adversarial-domain-adaptation-aaai18.pdf). The results with '\*' are run by myself with the code. 
