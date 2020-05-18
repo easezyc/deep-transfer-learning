@@ -32,13 +32,13 @@ def train(epoch, model):
     print('learning rate{: .4f}'.format(LEARNING_RATE) )
     if bottle_neck:
         optimizer = torch.optim.SGD([
-            {'params': model.sharedNet.parameters()},
+            {'params': model.feature_layers.parameters()},
             {'params': model.bottle.parameters(), 'lr': LEARNING_RATE},
             {'params': model.cls_fc.parameters(), 'lr': LEARNING_RATE},
         ], lr=LEARNING_RATE / 10, momentum=momentum, weight_decay=l2_decay)
     else:
         optimizer = torch.optim.SGD([
-            {'params': model.sharedNet.parameters()},
+            {'params': model.feature_layers.parameters()},
             {'params': model.cls_fc.parameters(), 'lr': LEARNING_RATE},
             ], lr=LEARNING_RATE / 10, momentum=momentum, weight_decay=l2_decay)
 
