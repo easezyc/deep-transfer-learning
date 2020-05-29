@@ -20,3 +20,23 @@ Adaptation Module (IAM) for cross-domain image classification.
 | Method | A - W | D - W | W - D | A - D | D - A | W - A | Average |
 |:--------------:|:-----:|:-----:|:-----:|:-----:|:----:|:----:|:-------:|
 | MRAN | 91.4±0.1 | 96.9±0.3 | 99.8±0.2 | 86.4±0.6 | 68.3±0.5 | 70.9±0.6 | 85.6 |
+
+## Reference
+
+```
+Zhu Y, Zhuang F, Wang J, et al. Multi-representation adaptation network for cross-domain image classification[J]. Neural Networks, 2019, 119: 214-221.
+```
+
+or in bibtex style:
+
+```
+@article{zhu2019multi,
+  title={Multi-representation adaptation network for cross-domain image classification},
+  author={Zhu, Yongchun and Zhuang, Fuzhen and Wang, Jindong and Chen, Jingwu and Shi, Zhiping and Wu, Wenjuan and He, Qing},
+  journal={Neural Networks},
+  volume={119},
+  pages={214--221},
+  year={2019},
+  publisher={Elsevier}
+}
+```

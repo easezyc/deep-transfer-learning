@@ -18,3 +18,21 @@ The contributions of this paper are summarized as follows.
 | DSAN | 93.6±0.2 | 98.4±0.1 | 100.0±0.0 | 90.2±0.7 | 73.5±0.5 | 74.8±0.4 | 88.4 |
 
 > Note that for tasks D-A and W-A, setting epochs = 800 or larger could achieve better performance.
+
+## Reference
+
+```
+Zhu Y, Zhuang F, Wang J, et al. Deep Subdomain Adaptation Network for Image Classification[J]. IEEE Transactions on Neural Networks and Learning Systems, 2020.
+```
+
+or in bibtex style:
+
+```
+@article{zhu2020deep,
+  title={Deep Subdomain Adaptation Network for Image Classification},
+  author={Zhu, Yongchun and Zhuang, Fuzhen and Wang, Jindong and Ke, Guolin and Chen, Jingwu and Bian, Jiang and Xiong, Hui and He, Qing},
+  journal={IEEE Transactions on Neural Networks and Learning Systems},
+  year={2020},
+  publisher={IEEE}
+}
+```

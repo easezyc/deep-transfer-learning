@@ -49,16 +49,18 @@ target samples.
 ## Reference
 
 ```
-Yongchun Zhu, Fuzhen Zhuang, and Deqin Wang. Aligning Domain-specific Distribution and Classifier for Cross-domain Classification from Multiple Sources. Thirty-Third AAAI Conference on Artificial Intelligence (AAAI2019).
+Zhu Y, Zhuang F, Wang D. Aligning domain-specific distribution and classifier for cross-domain classification from multiple sources[C]//Proceedings of the AAAI Conference on Artificial Intelligence. 2019, 33: 5989-5996.
 ```
 
 or in bibtex style:
 
 ```
-@inproceedings{zhu2018mfsan,
-    title={Aligning Domain-specific Distribution and Classifier for Cross-domain Classification from Multiple Sources},
-    author={Zhu, Yongchun and Zhuang, Fuzhen and Wnag, Deqin},
-    booktitle={Thirty-Third AAAI Conference on Artificial Intelligence (AAAI)},
-    year={2019}
+@inproceedings{zhu2019aligning,
+  title={Aligning domain-specific distribution and classifier for cross-domain classification from multiple sources},
+  author={Zhu, Yongchun and Zhuang, Fuzhen and Wang, Deqing},
+  booktitle={Proceedings of the AAAI Conference on Artificial Intelligence},
+  volume={33},
+  pages={5989--5996},
+  year={2019}
 }
 ```
