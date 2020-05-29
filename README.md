@@ -12,6 +12,8 @@ Here I have implemented some deep transfer methods as follows:
     * DSAN: Deep Subdomain Adaptation Network for Image Classification (IEEE Transactions on Neural Networks and Learning Systems 2020)
 * MUDA
     * Aligning Domain-specific Distribution and Classifier for Cross-domain Classification from Multiple Sources (AAAI2019)
+* Application
+    * Cross-domain Fraud Detection: Modeling Users’ Behavior Sequences with Hierarchical Explainable Network for Cross-domain Fraud Detection (WWW2020)
 
 ## Results on Office31(UDA)
 | Method | A - W | D - W | W - D | A - D | D - A | W - A | Average |
