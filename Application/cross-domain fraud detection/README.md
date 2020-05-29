@@ -1,4 +1,4 @@
-# DSAN
+# HEN & GTF
 A PyTorch implementation of 'Modeling Users’ Behavior Sequences with Hierarchical Explainable Network for Cross-domain Fraud Detection' which has published on WWW2020.
 The contributions of this paper are summarized as follows. 
 * To solve the sequence-based fraud detection problem, we propose hierarchical explainable network (HEN) to model users’ behavior sequences, which could not only improve the performance of fraud detection but also give reasonable explanations for the prediction results.
