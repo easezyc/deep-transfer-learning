@@ -14,6 +14,9 @@ Here I have implemented some deep transfer methods as follows:
     * Aligning Domain-specific Distribution and Classifier for Cross-domain Classification from Multiple Sources (AAAI2019)
 * Application
     * Cross-domain Fraud Detection: Modeling Users’ Behavior Sequences with Hierarchical Explainable Network for Cross-domain Fraud Detection (WWW2020)
+* Survey
+    * [A Comprehensive Survey on Transfer Learning](https://arxiv.org/abs/1911.02685) (Proc. IEEE)
+
 
 ## Results on Office31(UDA)
 | Method | A - W | D - W | W - D | A - D | D - A | W - A | Average |
