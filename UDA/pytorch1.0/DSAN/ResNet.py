@@ -1,11 +1,6 @@
 import torch.nn as nn
 import math
 import torch.utils.model_zoo as model_zoo
-import mmd
-import torch
-import numpy as np
-from Config import bottle_neck
-
 
 __all__ = ['ResNet', 'resnet18', 'resnet34', 'resnet50', 'resnet101',
            'resnet152']
@@ -155,33 +150,6 @@ class ResNet(nn.Module):
 
         return x
 
-class DSAN(nn.Module):
-
-    def __init__(self, num_classes=31):
-        super(DSAN, self).__init__()
-        self.feature_layers = resnet50(True)
-
-        if bottle_neck:
-            self.bottle = nn.Linear(2048, 256)
-            self.cls_fc = nn.Linear(256, num_classes)
-        else:
-            self.cls_fc = nn.Linear(2048, num_classes)
-
-
-    def forward(self, source, target, s_label):
-        source = self.feature_layers(source)
-        if bottle_neck:
-            source = self.bottle(source)
-        s_pred = self.cls_fc(source)
-        if self.training ==True:
-            target = self.feature_layers(target)
-            if bottle_neck:
-                target = self.bottle(target)
-            t_label = self.cls_fc(target)
-            loss = mmd.lmmd(source, target, s_label, torch.nn.functional.softmax(t_label, dim=1))
-        else:
-            loss = 0
-        return s_pred, loss
 
 def resnet50(pretrained=False, **kwargs):
     """Constructs a ResNet-50 model.

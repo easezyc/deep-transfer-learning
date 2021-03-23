@@ -9,8 +9,8 @@ The contributions of this paper are summarized as follows.
 
 ## Usage
 1. You can download Office31 dataset [here](https://pan.baidu.com/s/1o8igXT4#list/path=%2F). And then unrar dataset in ./dataset/.
-2. You can change the `source_name` and `target_name` in `Config.py` to set different transfer tasks.
-3. Run `python DSAN.py`.
+2. You can change the `src` and `tgt` in `main.py` to set different transfer tasks.
+3. Run `python main.py`.
 
 ## Results on Office31
 | Method | A - W | D - W | W - D | A - D | D - A | W - A | Average |
