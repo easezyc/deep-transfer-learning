@@ -48,7 +48,7 @@ def train_epoch(epoch, model, dataloaders):
         data_target = data_target.cuda()
 
         optimizer.zero_grad()
-        label_source_pred, loss_lmmd = net(
+        label_source_pred, loss_lmmd = model(
             data_source, data_target, label_source)
         loss_cls = F.nll_loss(F.log_softmax(
             label_source_pred, dim=1), label_source)
