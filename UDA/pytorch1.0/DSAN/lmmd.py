@@ -56,7 +56,7 @@ class LMMD_loss(nn.Module):
     def cal_weight(self, s_label, t_label, batch_size=32, class_num=31):
         batch_size = s_label.size()[0]
         s_sca_label = s_label.cpu().data.numpy()
-        s_vec_label = self.convert_to_onehot(s_sca_label)
+        s_vec_label = self.convert_to_onehot(s_sca_label, class_num=self.class_num)
         s_sum = np.sum(s_vec_label, axis=0).reshape(1, class_num)
         s_sum[s_sum == 0] = 100
         s_vec_label = s_vec_label / s_sum
