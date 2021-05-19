@@ -11,7 +11,7 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 # Training settings
 batch_size = 32
 iteration = 15000
-lr = 0.01
+lr = [0.001, 0.01]
 momentum = 0.9
 cuda = True
 seed = 8
@@ -42,13 +42,7 @@ def train(model):
     source3_iter = iter(source3_loader)
     target_iter = iter(target_train_loader)
     correct = 0
-
-    for i in range(1, iteration + 1):
-        model.train()
-        LEARNING_RATE = lr / math.pow((1 + 10 * (i - 1) / (iteration)), 0.75)
-        if (i - 1) % 100 == 0:
-            print("learning rate：", LEARNING_RATE)
-        optimizer = torch.optim.SGD([
+    optimizer = torch.optim.SGD([
             {'params': model.sharedNet.parameters()},
             {'params': model.cls_fc_son1.parameters(), 'lr': LEARNING_RATE},
             {'params': model.cls_fc_son2.parameters(), 'lr': LEARNING_RATE},
@@ -58,6 +52,16 @@ def train(model):
             {'params': model.sonnet3.parameters(), 'lr': LEARNING_RATE},
         ], lr=LEARNING_RATE / 10, momentum=momentum, weight_decay=l2_decay)
 
+    for i in range(1, iteration + 1):
+        model.train()
+        optimizer.param_group[0]['lr'] = lr[0] / math.pow((1 + 10 * (i - 1) / (iteration)), 0.75)
+        optimizer.param_group[1]['lr'] = lr[1] / math.pow((1 + 10 * (i - 1) / (iteration)), 0.75)
+        optimizer.param_group[2]['lr'] = lr[1] / math.pow((1 + 10 * (i - 1) / (iteration)), 0.75)
+        optimizer.param_group[3]['lr'] = lr[1] / math.pow((1 + 10 * (i - 1) / (iteration)), 0.75)
+        optimizer.param_group[4]['lr'] = lr[1] / math.pow((1 + 10 * (i - 1) / (iteration)), 0.75)
+        optimizer.param_group[5]['lr'] = lr[1] / math.pow((1 + 10 * (i - 1) / (iteration)), 0.75)
+        optimizer.param_group[6]['lr'] = lr[1] / math.pow((1 + 10 * (i - 1) / (iteration)), 0.75)
+        
         try:
             source_data, source_label = source1_iter.next()
         except Exception as err:

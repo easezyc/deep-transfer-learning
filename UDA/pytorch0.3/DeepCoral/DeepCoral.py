@@ -12,7 +12,7 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 # Training settings
 batch_size = 32
 epochs = 200
-lr = 0.01
+lr = [0.001, 0.01]
 momentum = 0.9
 no_cuda =False
 seed = 8
@@ -49,13 +49,9 @@ def load_pretrain(model):
     model.load_state_dict(model_dict)
     return model
 
-def train(epoch, model):
-    LEARNING_RATE = lr / math.pow((1 + 10 * (epoch - 1) / epochs), 0.75)
-    print('learning rate{: .4f}'.format(LEARNING_RATE) )
-    optimizer = torch.optim.SGD([
-        {'params': model.sharedNet.parameters()},
-        {'params': model.cls_fc.parameters(), 'lr': LEARNING_RATE},
-        ], lr=LEARNING_RATE / 10, momentum=momentum, weight_decay=l2_decay)
+def train(epoch, model, optimizer):
+    optimizer.param_group[0]['lr'] = lr[0] / math.pow((1 + 10 * (epoch - 1) / epochs), 0.75)
+    optimizer.param_group[1]['lr'] = lr[1] / math.pow((1 + 10 * (epoch - 1) / epochs), 0.75)
 
     model.train()
 
@@ -113,8 +109,14 @@ if __name__ == '__main__':
     if cuda:
         model.cuda()
     model = load_pretrain(model)
+
+    optimizer = torch.optim.SGD([
+        {'params': model.sharedNet.parameters()},
+        {'params': model.cls_fc.parameters(), 'lr': lr[1]},
+        ], lr=lr[0], momentum=momentum, weight_decay=l2_decay)
+
     for epoch in range(1, epochs + 1):
-        train(epoch, model)
+        train(epoch, model, optimizer)
         t_correct = test(model)
         if t_correct > correct:
             correct = t_correct

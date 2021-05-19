@@ -12,7 +12,7 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "0"
 # Training settings
 batch_size = 32
 iteration=10000
-lr = 0.01
+lr = [0.001, 0.01]
 momentum = 0.9
 no_cuda =False
 seed = 8
@@ -44,15 +44,16 @@ def train(model):
     src_iter = iter(src_loader)
     tgt_iter = iter(tgt_train_loader)
     correct=0
+
+    optimizer = torch.optim.SGD([
+        {'params': model.sharedNet.parameters()},
+        {'params': model.cls_fc.parameters(), 'lr': lr[1]},
+        ], lr=lr[0], momentum=momentum, weight_decay=l2_decay)
+
     for i in range(1, iteration+1):
         model.train()
-        LEARNING_RATE = lr / math.pow((1 + 10 * (i - 1) / (iteration)), 0.75)
-        if (i-1)%100==0:
-            print('learning rate{: .4f}'.format(LEARNING_RATE))
-        optimizer = torch.optim.SGD([
-        {'params': model.sharedNet.parameters()},
-        {'params': model.cls_fc.parameters(), 'lr': LEARNING_RATE},
-        ], lr=LEARNING_RATE / 10, momentum=momentum, weight_decay=l2_decay)
+        optimizer.param_group[0]['lr'] = lr[0] / math.pow((1 + 10 * (i - 1) / (iteration)), 0.75)
+        optimizer.param_group[1]['lr'] = lr[1] / math.pow((1 + 10 * (i - 1) / (iteration)), 0.75)
         try:
             src_data, src_label = src_iter.next()
         except Exception as err:

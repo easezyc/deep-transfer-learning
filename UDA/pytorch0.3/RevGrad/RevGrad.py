@@ -14,7 +14,7 @@ os.environ["CUDA_VISIBLE_DEVICES"] = "1"
 # Training settings
 batch_size = 32
 epochs = 200
-lr = 0.01
+lr = [0.001, 0.01]
 momentum = 0.9
 no_cuda =False
 seed = 8
@@ -51,17 +51,12 @@ def load_pretrain(model):
     model.load_state_dict(model_dict)
     return model
 
-def train(epoch, model):
-    #最后的全连接层学习率为前面的10倍
-    LEARNING_RATE = lr / math.pow((1 + 10 * (epoch - 1) / epochs), 0.75)
-    print("learning rate: ", LEARNING_RATE)
-    optimizer_fea = torch.optim.SGD([
-        {'params': model.sharedNet.parameters()},
-        {'params': model.cls_fc.parameters(), 'lr': LEARNING_RATE},
-    ], lr=LEARNING_RATE / 10, momentum=momentum, weight_decay=l2_decay)
-    optimizer_critic = torch.optim.SGD([
-        {'params': model.domain_fc.parameters(), 'lr': LEARNING_RATE}
-    ], lr=LEARNING_RATE, momentum=momentum, weight_decay=l2_decay)
+def train(epoch, model, optimizer_fea, optimizer_critic):
+
+    optimizer_fea.param_group[0]['lr'] = lr[0] / math.pow((1 + 10 * (epoch - 1) / epochs), 0.75)
+    optimizer_fea.param_group[1]['lr'] = lr[1] / math.pow((1 + 10 * (epoch - 1) / epochs), 0.75)
+    optimizer_critic.param_group[0]['lr'] = lr[1] / math.pow((1 + 10 * (epoch - 1) / epochs), 0.75)
+    
 
     data_source_iter = iter(source_loader)
     data_target_iter = iter(target_train_loader)
@@ -137,8 +132,15 @@ if __name__ == '__main__':
     if cuda:
         model.cuda()
     model = load_pretrain(model)
+    optimizer_fea = torch.optim.SGD([
+        {'params': model.sharedNet.parameters()},
+        {'params': model.cls_fc.parameters(), 'lr': lr[1]},
+    ], lr=lr[0], momentum=momentum, weight_decay=l2_decay)
+    optimizer_critic = torch.optim.SGD([
+        {'params': model.domain_fc.parameters(), 'lr': lr[1]}
+    ], lr=lr[1], momentum=momentum, weight_decay=l2_decay)
     for epoch in range(1, epochs + 1):
-        train(epoch, model)
+        train(epoch, model, optimizer_fea, optimizer_critic)
         t_correct = test(model)
         if t_correct > correct:
             correct = t_correct

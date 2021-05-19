@@ -18,21 +18,8 @@ def load_data(root_path, src, tar, batch_size):
     return loader_src, loader_tar, loader_tar_test
 
 
-def train_epoch(epoch, model, dataloaders):
-    LEARNING_RATE = args.lr / \
-        math.pow((1 + 10 * (epoch - 1) / args.nepoch), 0.75)
-    print('learning rate{: .4f}'.format(LEARNING_RATE))
-    if args.bottleneck:
-        optimizer = torch.optim.SGD([
-            {'params': model.feature_layers.parameters()},
-            {'params': model.bottle.parameters(), 'lr': LEARNING_RATE},
-            {'params': model.cls_fc.parameters(), 'lr': LEARNING_RATE},
-        ], lr=LEARNING_RATE / 10, momentum=args.momentum, weight_decay=args.decay)
-    else:
-        optimizer = torch.optim.SGD([
-            {'params': model.feature_layers.parameters()},
-            {'params': model.cls_fc.parameters(), 'lr': LEARNING_RATE},
-        ], lr=LEARNING_RATE / 10, momentum=args.momentum, weight_decay=args.decay)
+def train_epoch(epoch, model, dataloaders, optimizer):
+    
 
     model.train()
     source_loader, target_train_loader, _ = dataloaders
@@ -103,7 +90,7 @@ def get_args():
                         help='batch size', default=32)
     parser.add_argument('--nepoch', type=int,
                         help='Total epoch num', default=200)
-    parser.add_argument('--lr', type=float, help='Learning rate', default=0.01)
+    parser.add_argument('--lr', type=list, help='Learning rate', default=[0.001, 0.01])
     parser.add_argument('--early_stop', type=int,
                         help='Early stoping number', default=30)
     parser.add_argument('--seed', type=int,
@@ -140,9 +127,30 @@ if __name__ == '__main__':
     
     correct = 0
     stop = 0
+
+    if args.bottleneck:
+        optimizer = torch.optim.SGD([
+            {'params': model.feature_layers.parameters()},
+            {'params': model.bottle.parameters(), 'lr': args.lr[1]},
+            {'params': model.cls_fc.parameters(), 'lr': args.lr[1]},
+        ], lr=args.lr[0], momentum=args.momentum, weight_decay=args.decay)
+    else:
+        optimizer = torch.optim.SGD([
+            {'params': model.feature_layers.parameters()},
+            {'params': model.cls_fc.parameters(), 'lr': args.lr[1]},
+        ], lr=args.lr[0], momentum=args.momentum, weight_decay=args.decay)
+
     for epoch in range(1, args.nepoch + 1):
         stop += 1
-        train_epoch(epoch, model, dataloaders)
+
+        if args.bottleneck:
+            optimizer.param_group[0]['lr'] = args.lr[0] / math.pow((1 + 10 * (epoch - 1) / args.nepoch), 0.75)
+            optimizer.param_group[1]['lr'] = args.lr[1] / math.pow((1 + 10 * (epoch - 1) / args.nepoch), 0.75)
+            optimizer.param_group[2]['lr'] = args.lr[1] / math.pow((1 + 10 * (epoch - 1) / args.nepoch), 0.75)
+        else:
+            optimizer.param_group[0]['lr'] = args.lr[0] / math.pow((1 + 10 * (epoch - 1) / args.nepoch), 0.75)
+            optimizer.param_group[1]['lr'] = args.lr[1] / math.pow((1 + 10 * (epoch - 1) / args.nepoch), 0.75)
+        train_epoch(epoch, model, dataloaders, optimizer)
         t_correct = test(model, dataloaders[-1])
         if t_correct > correct:
             correct = t_correct

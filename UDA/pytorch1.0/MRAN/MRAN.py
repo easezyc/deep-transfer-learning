@@ -18,7 +18,7 @@ parser.add_argument('--test-batch-size', type=int, default=32, metavar='N',
                     help='input batch size for testing (default: 1000)')
 parser.add_argument('--epochs', type=int, default=200, metavar='N',
                     help='number of epochs to train (default: 10)')
-parser.add_argument('--lr', type=float, default=0.01, metavar='LR',
+parser.add_argument('--lr', type=list, default=[0.001, 0.01], metavar='LR',
                     help='learning rate (default: 0.01)')
 parser.add_argument('--momentum', type=float, default=0.9, metavar='M',
                     help='SGD momentum (default: 0.5)')
@@ -59,17 +59,8 @@ def load_data():
 
     return source_train_loader, target_train_loader, target_test_loader
 
-def train(epoch, model, source_loader, target_loader):
-    #最后的全连接层学习率为前面的10倍
-    LEARNING_RATE = args.lr / math.pow((1 + 10 * (epoch - 1) / args.epochs), 0.75)
-    print("learning rate：", LEARNING_RATE)
-    if args.diff_lr:
-        optimizer = torch.optim.SGD([
-        {'params': model.sharedNet.parameters()},
-        {'params': model.Inception.parameters(), 'lr': LEARNING_RATE},
-        ], lr=LEARNING_RATE / 10, momentum=args.momentum, weight_decay=args.l2_decay)
-    else:
-        optimizer = optim.SGD(model.parameters(), lr=LEARNING_RATE, momentum=args.momentum,weight_decay = args.l2_decay)
+def train(epoch, model, source_loader, target_loader, optimizer):
+    
     model.train()
     tgt_iter = iter(target_loader)
     for batch_idx, (source_data, source_label) in enumerate(source_loader):
@@ -126,8 +117,22 @@ if __name__ == '__main__':
         model.cuda()
     train_loader, unsuptrain_loader, test_loader = load_data()
     correct = 0
+
+    if args.diff_lr:
+        optimizer = torch.optim.SGD([
+        {'params': model.sharedNet.parameters()},
+        {'params': model.Inception.parameters(), 'lr': args.lr[1]},
+        ], lr=args.lr[0], momentum=args.momentum, weight_decay=args.l2_decay)
+    else:
+        optimizer = optim.SGD(model.parameters(), lr=args.lr[1], momentum=args.momentum,weight_decay = args.l2_decay)
+
     for epoch in range(1, args.epochs + 1):
-        train(epoch, model, train_loader, unsuptrain_loader)
+        if args.diff_lr:
+            optimizer.param_group[0]['lr'] = args.lr[0] / math.pow((1 + 10 * (epoch - 1) / args.epochs), 0.75)
+            optimizer.param_group[1]['lr'] = args.lr[1] / math.pow((1 + 10 * (epoch - 1) / args.epochs), 0.75)
+        else:
+            optimizer.param_group['lr'] = args.lr[1] / math.pow((1 + 10 * (epoch - 1) / args.epochs), 0.75)
+        train(epoch, model, train_loader, unsuptrain_loader, optimizer)
         t_correct = test(model, test_loader)
         if t_correct > correct:
             correct = t_correct
