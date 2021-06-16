@@ -78,3 +78,28 @@ Here I have implemented some deep transfer methods as follows:
 If you have any problem about this library, please create an Issue or send us an Email at:
 * zhuyongchun18s@ict.ac.cn
 * jindongwang@outlook.com
+
+
+## Reference
+If you use this repository, please cite the following papers:
+
+```
+@inproceedings{zhu2019aligning,
+  title={Aligning domain-specific distribution and classifier for cross-domain classification from multiple sources},
+  author={Zhu, Yongchun and Zhuang, Fuzhen and Wang, Deqing},
+  booktitle={Proceedings of the AAAI Conference on Artificial Intelligence},
+  volume={33},
+  pages={5989--5996},
+  year={2019}
+}
+```
+
+```
+@article{zhu2020deep,
+  title={Deep Subdomain Adaptation Network for Image Classification},
+  author={Zhu, Yongchun and Zhuang, Fuzhen and Wang, Jindong and Ke, Guolin and Chen, Jingwu and Bian, Jiang and Xiong, Hui and He, Qing},
+  journal={IEEE Transactions on Neural Networks and Learning Systems},
+  year={2020},
+  publisher={IEEE}
+}
+```
