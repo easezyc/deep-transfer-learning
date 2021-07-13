@@ -1,4 +1,6 @@
 # Deep Transfer Learning on PyTorch
+[![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](https://opensource.org/licenses/MIT) 
+
 This is a PyTorch library for deep transfer learning. We divide the code into two
 aspects: Single-source Unsupervised Domain Adaptation (SUDA) and Multi-source Unsupervised Domain Adaptation (MUDA). There are many SUDA methods, however I find there is a few MUDA methods with deep learning. Besides, MUDA with deep learning might be a more promising direction for domain adaptation.
 
