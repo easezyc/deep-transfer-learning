@@ -44,23 +44,23 @@ def train(model):
     correct = 0
     optimizer = torch.optim.SGD([
             {'params': model.sharedNet.parameters()},
-            {'params': model.cls_fc_son1.parameters(), 'lr': LEARNING_RATE},
-            {'params': model.cls_fc_son2.parameters(), 'lr': LEARNING_RATE},
-            {'params': model.cls_fc_son3.parameters(), 'lr': LEARNING_RATE},
-            {'params': model.sonnet1.parameters(), 'lr': LEARNING_RATE},
-            {'params': model.sonnet2.parameters(), 'lr': LEARNING_RATE},
-            {'params': model.sonnet3.parameters(), 'lr': LEARNING_RATE},
-        ], lr=LEARNING_RATE / 10, momentum=momentum, weight_decay=l2_decay)
+            {'params': model.cls_fc_son1.parameters(), 'lr': lr[1]},
+            {'params': model.cls_fc_son2.parameters(), 'lr': lr[1]},
+            {'params': model.cls_fc_son3.parameters(), 'lr': lr[1]},
+            {'params': model.sonnet1.parameters(), 'lr': lr[1]},
+            {'params': model.sonnet2.parameters(), 'lr': lr[1]},
+            {'params': model.sonnet3.parameters(), 'lr': lr[1]},
+        ], lr=lr[0], momentum=momentum, weight_decay=l2_decay)
 
     for i in range(1, iteration + 1):
         model.train()
-        optimizer.param_group[0]['lr'] = lr[0] / math.pow((1 + 10 * (i - 1) / (iteration)), 0.75)
-        optimizer.param_group[1]['lr'] = lr[1] / math.pow((1 + 10 * (i - 1) / (iteration)), 0.75)
-        optimizer.param_group[2]['lr'] = lr[1] / math.pow((1 + 10 * (i - 1) / (iteration)), 0.75)
-        optimizer.param_group[3]['lr'] = lr[1] / math.pow((1 + 10 * (i - 1) / (iteration)), 0.75)
-        optimizer.param_group[4]['lr'] = lr[1] / math.pow((1 + 10 * (i - 1) / (iteration)), 0.75)
-        optimizer.param_group[5]['lr'] = lr[1] / math.pow((1 + 10 * (i - 1) / (iteration)), 0.75)
-        optimizer.param_group[6]['lr'] = lr[1] / math.pow((1 + 10 * (i - 1) / (iteration)), 0.75)
+        optimizer.param_groups[0]['lr'] = lr[0] / math.pow((1 + 10 * (i - 1) / (iteration)), 0.75)
+        optimizer.param_groups[1]['lr'] = lr[1] / math.pow((1 + 10 * (i - 1) / (iteration)), 0.75)
+        optimizer.param_groups[2]['lr'] = lr[1] / math.pow((1 + 10 * (i - 1) / (iteration)), 0.75)
+        optimizer.param_groups[3]['lr'] = lr[1] / math.pow((1 + 10 * (i - 1) / (iteration)), 0.75)
+        optimizer.param_groups[4]['lr'] = lr[1] / math.pow((1 + 10 * (i - 1) / (iteration)), 0.75)
+        optimizer.param_groups[5]['lr'] = lr[1] / math.pow((1 + 10 * (i - 1) / (iteration)), 0.75)
+        optimizer.param_groups[6]['lr'] = lr[1] / math.pow((1 + 10 * (i - 1) / (iteration)), 0.75)
         
         try:
             source_data, source_label = source1_iter.next()

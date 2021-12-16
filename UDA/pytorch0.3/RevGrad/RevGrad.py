@@ -53,9 +53,9 @@ def load_pretrain(model):
 
 def train(epoch, model, optimizer_fea, optimizer_critic):
 
-    optimizer_fea.param_group[0]['lr'] = lr[0] / math.pow((1 + 10 * (epoch - 1) / epochs), 0.75)
-    optimizer_fea.param_group[1]['lr'] = lr[1] / math.pow((1 + 10 * (epoch - 1) / epochs), 0.75)
-    optimizer_critic.param_group[0]['lr'] = lr[1] / math.pow((1 + 10 * (epoch - 1) / epochs), 0.75)
+    optimizer_fea.param_groups[0]['lr'] = lr[0] / math.pow((1 + 10 * (epoch - 1) / epochs), 0.75)
+    optimizer_fea.param_groups[1]['lr'] = lr[1] / math.pow((1 + 10 * (epoch - 1) / epochs), 0.75)
+    optimizer_critic.param_groups[0]['lr'] = lr[1] / math.pow((1 + 10 * (epoch - 1) / epochs), 0.75)
     
 
     data_source_iter = iter(source_loader)

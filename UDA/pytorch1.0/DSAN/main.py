@@ -5,7 +5,7 @@ import argparse
 import numpy as np
 import os
 
-from dsan import DSAN
+from DSAN import DSAN
 import data_loader
 
 
@@ -90,7 +90,7 @@ def get_args():
                         help='batch size', default=32)
     parser.add_argument('--nepoch', type=int,
                         help='Total epoch num', default=200)
-    parser.add_argument('--lr', type=list, help='Learning rate', default=[0.001, 0.01])
+    parser.add_argument('--lr', type=list, help='Learning rate', default=[0.001, 0.01, 0.01])
     parser.add_argument('--early_stop', type=int,
                         help='Early stoping number', default=30)
     parser.add_argument('--seed', type=int,
@@ -132,7 +132,7 @@ if __name__ == '__main__':
         optimizer = torch.optim.SGD([
             {'params': model.feature_layers.parameters()},
             {'params': model.bottle.parameters(), 'lr': args.lr[1]},
-            {'params': model.cls_fc.parameters(), 'lr': args.lr[1]},
+            {'params': model.cls_fc.parameters(), 'lr': args.lr[2]},
         ], lr=args.lr[0], momentum=args.momentum, weight_decay=args.decay)
     else:
         optimizer = torch.optim.SGD([
@@ -142,14 +142,9 @@ if __name__ == '__main__':
 
     for epoch in range(1, args.nepoch + 1):
         stop += 1
+        for index, param_group in enumerate(optimizer.param_groups):
+            param_group['lr'] = args.lr[index] / math.pow((1 + 10 * (epoch - 1) / args.nepoch), 0.75)
 
-        if args.bottleneck:
-            optimizer.param_group[0]['lr'] = args.lr[0] / math.pow((1 + 10 * (epoch - 1) / args.nepoch), 0.75)
-            optimizer.param_group[1]['lr'] = args.lr[1] / math.pow((1 + 10 * (epoch - 1) / args.nepoch), 0.75)
-            optimizer.param_group[2]['lr'] = args.lr[1] / math.pow((1 + 10 * (epoch - 1) / args.nepoch), 0.75)
-        else:
-            optimizer.param_group[0]['lr'] = args.lr[0] / math.pow((1 + 10 * (epoch - 1) / args.nepoch), 0.75)
-            optimizer.param_group[1]['lr'] = args.lr[1] / math.pow((1 + 10 * (epoch - 1) / args.nepoch), 0.75)
         train_epoch(epoch, model, dataloaders, optimizer)
         t_correct = test(model, dataloaders[-1])
         if t_correct > correct:

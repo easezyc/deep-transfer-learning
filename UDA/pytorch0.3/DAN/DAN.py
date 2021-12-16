@@ -53,9 +53,6 @@ def load_pretrain(model):
 
 def train(epoch, model, optimizer):
 
-    optimizer.param_group[0]['lr'] = lr[0] / math.pow((1 + 10 * (epoch - 1) / epochs), 0.75)
-    optimizer.param_group[1]['lr'] = lr[1] / math.pow((1 + 10 * (epoch - 1) / epochs), 0.75)
-
     model.train()
 
     iter_source = iter(source_loader)
@@ -119,6 +116,8 @@ if __name__ == '__main__':
         ], lr=lr[0], momentum=momentum, weight_decay=l2_decay)
 
     for epoch in range(1, epochs + 1):
+        for index, param_group in enumerate(optimizer.param_groups):
+            param_group['lr'] = lr[index] / math.pow((1 + 10 * (epoch - 1) / epochs), 0.75)
         train(epoch, model, optimizer)
         t_correct = test(model)
         if t_correct > correct:

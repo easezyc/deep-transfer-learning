@@ -47,7 +47,7 @@ def train(model):
     tgt_iter = iter(tgt_train_loader)
     correct = 0
 
-     optimizer = torch.optim.SGD([
+    optimizer = torch.optim.SGD([
         {'params': model.sharedNet.parameters()},
         {'params': model.cls_fc.parameters(), 'lr': lr[1]},
         ], lr=lr[0], momentum=momentum, weight_decay=l2_decay)
@@ -55,8 +55,8 @@ def train(model):
     for i in range(1, iteration+1):
         model.train()
        
-        optimizer.param_group[0]['lr'] = lr[0] / math.pow((1 + 10 * (i - 1) / (iteration)), 0.75)
-        optimizer.param_group[1]['lr'] = lr[1] / math.pow((1 + 10 * (i - 1) / (iteration)), 0.75)
+        for index, param_group in enumerate(optimizer.param_groups):
+            param_group['lr'] = lr[index] / math.pow((1 + 10 * (i - 1) / iteration), 0.75)
 
         try:
             src_data, src_label = src_iter.next()

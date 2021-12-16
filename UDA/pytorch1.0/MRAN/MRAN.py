@@ -32,14 +32,12 @@ parser.add_argument('--l2_decay', type=float, default=5e-4,
                     help='the L2  weight decay')
 parser.add_argument('--save_path', type=str, default="./tmp/origin_",
                     help='the path to save the model')
-parser.add_argument('--root_path', type=str, default="../OFFICE31/",
+parser.add_argument('--root_path', type=str, default="/data/zhuyc/OFFICE31/",
                     help='the path to load the data')
 parser.add_argument('--source_dir', type=str, default="webcam",
                     help='the name of the source dir')
 parser.add_argument('--test_dir', type=str, default="dslr",
                     help='the name of the test dir')
-parser.add_argument('--diff_lr', type=bool, default=True,
-                    help='the fc layer and the sharenet have different or same learning rate')
 parser.add_argument('--gamma', type=int, default=1,
                     help='the fc layer and the sharenet have different or same learning rate')
 
@@ -118,20 +116,15 @@ if __name__ == '__main__':
     train_loader, unsuptrain_loader, test_loader = load_data()
     correct = 0
 
-    if args.diff_lr:
-        optimizer = torch.optim.SGD([
-        {'params': model.sharedNet.parameters()},
-        {'params': model.Inception.parameters(), 'lr': args.lr[1]},
-        ], lr=args.lr[0], momentum=args.momentum, weight_decay=args.l2_decay)
-    else:
-        optimizer = optim.SGD(model.parameters(), lr=args.lr[1], momentum=args.momentum,weight_decay = args.l2_decay)
+    optimizer = torch.optim.SGD([
+    {'params': model.sharedNet.parameters()},
+    {'params': model.Inception.parameters(), 'lr': args.lr[1]},
+    ], lr=args.lr[0], momentum=args.momentum, weight_decay=args.l2_decay)
 
     for epoch in range(1, args.epochs + 1):
-        if args.diff_lr:
-            optimizer.param_group[0]['lr'] = args.lr[0] / math.pow((1 + 10 * (epoch - 1) / args.epochs), 0.75)
-            optimizer.param_group[1]['lr'] = args.lr[1] / math.pow((1 + 10 * (epoch - 1) / args.epochs), 0.75)
-        else:
-            optimizer.param_group['lr'] = args.lr[1] / math.pow((1 + 10 * (epoch - 1) / args.epochs), 0.75)
+        for index, param_group in enumerate(optimizer.param_groups):
+            param_group['lr'] = args.lr[index] / math.pow((1 + 10 * (epoch - 1) / args.epochs), 0.75)
+
         train(epoch, model, train_loader, unsuptrain_loader, optimizer)
         t_correct = test(model, test_loader)
         if t_correct > correct:
