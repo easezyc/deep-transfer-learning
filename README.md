@@ -99,10 +99,26 @@ If you use this repository, please cite the following papers:
 
 ```
 @article{zhu2020deep,
-  title={Deep Subdomain Adaptation Network for Image Classification},
+  title={Deep subdomain adaptation network for image classification},
   author={Zhu, Yongchun and Zhuang, Fuzhen and Wang, Jindong and Ke, Guolin and Chen, Jingwu and Bian, Jiang and Xiong, Hui and He, Qing},
-  journal={IEEE Transactions on Neural Networks and Learning Systems},
+  journal={IEEE transactions on neural networks and learning systems},
+  volume={32},
+  number={4},
+  pages={1713--1722},
   year={2020},
   publisher={IEEE}
 }
 ```
+
+```
+@article{zhu2019multi,
+  title={Multi-representation adaptation network for cross-domain image classification},
+  author={Zhu, Yongchun and Zhuang, Fuzhen and Wang, Jindong and Chen, Jingwu and Shi, Zhiping and Wu, Wenjuan and He, Qing},
+  journal={Neural Networks},
+  volume={119},
+  pages={214--221},
+  year={2019},
+  publisher={Elsevier}
+}
+```
+
