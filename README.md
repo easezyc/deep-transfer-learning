@@ -1,4 +1,4 @@
-# Deep Transfer Learning on PyTorch
+# Deep Transfer Learning in PyTorch
 [![MIT License](https://img.shields.io/badge/license-MIT-green.svg)](https://opensource.org/licenses/MIT) 
 
 This is a PyTorch library for deep transfer learning. We divide the code into two
